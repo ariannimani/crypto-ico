@@ -12,12 +12,12 @@ export const FaqQuestions = ({ id, question, answer, category }) => {
       <div className="card-header" id="headingOne">
         <h5 className="mb-0">
           <a
+            onClick={() => setIsCollapsed(id)}
             className="btn-link"
             data-toggle="collapse"
             data-target={`#collapse${id}`}
             aria-expanded={isCollapsed === id ? "true" : "false"}
             aria-controls={`collapse${id}`}
-            onClick={() => setIsCollapsed(id)}
           >
             <span className="icon gradient-crypto"></span>
             {question}

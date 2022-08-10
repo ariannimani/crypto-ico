@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Questions } from "../../components/faq-details/faq-details";
-import { CATEGORIES } from "../../data/data";
+import { CATEGORIES, FAQ } from "../../data/data";
 
 export const Faq = () => {
   const [isSelected, setIsSelected] = useState("general");
@@ -20,8 +20,8 @@ export const Faq = () => {
               data-animation="fadeInUpShorter"
               data-animation-delay="0.3s"
             >
-              <h6 className="sub-title">question</h6>
-              <h2 className="title">FAQ</h2>
+              <h6 className="sub-title">{FAQ.subtitle}</h6>
+              <h2 className="title">{FAQ.title}</h2>
             </div>
 
             <p
@@ -29,10 +29,7 @@ export const Faq = () => {
               data-animation="fadeInUpShorter"
               data-animation-delay="0.4s"
             >
-              Originally the term "FAQ" referred to the Frequently Asked
-              Question itself, and the <br className="d-none d-xl-block" />
-              compilation of questions and answers was known as a "FAQ list" or
-              some similar expression.
+              {FAQ.description}
             </p>
           </div>
           <div className="row">

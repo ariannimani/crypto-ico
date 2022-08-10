@@ -1,6 +1,35 @@
 import React from "react";
+import { useEffect } from "react";
+import { ethers } from "ethers";
+import { useContext } from "react";
+import { StateContext } from "../../context/StateProvider";
+import {
+  SET_PROVIDER,
+  SET_SIGNER_ADDRESS,
+} from "../../context/actions/actions";
+import { Swap } from "../../components/swap/swap";
 
 export const Token = () => {
+  const {
+    providerState,
+    providerDispatch,
+    signerState,
+    signerDispatch,
+    signerAddressState,
+    signerAddressDispatch,
+  } = useContext(StateContext);
+
+  useEffect(() => {
+    const onLoad = async () => {
+      const provider = await new ethers.providers.Web3Provider(window.ethereum);
+      providerDispatch({
+        type: SET_PROVIDER,
+        playload: { provider: provider },
+      });
+    };
+    onLoad();
+  }, []);
+
   return (
     <section
       id="token-sale-mobile-app"
@@ -31,53 +60,7 @@ export const Token = () => {
               >
                 <div className="token-sale-counter">
                   <h5>ICO will start in</h5>
-                  <div className="token-details text-center">
-                    <div className="clock-counter mb-4">
-                      <div className="clock ml-0 mt-5 d-flex justify-content-center"></div>
-                      <div className="message"></div>
-                    </div>
-
-                    <div className="loading-bar mb-2 position-relative">
-                      <div className="progres-area pb-5">
-                        <ul className="progress-top">
-                          <li></li>
-                          <li className="pre-sale">Pre-Sale</li>
-                          <li>Soft Cap</li>
-                          <li className="bonus">Bonus</li>
-                          <li></li>
-                        </ul>
-                        <ul className="progress-bars">
-                          <li></li>
-                          <li>|</li>
-                          <li>|</li>
-                          <li>|</li>
-                          <li></li>
-                        </ul>
-                        <div className="progress">
-                          <div
-                            className="progress-bar progress-bar-custom"
-                            role="progressbar"
-                            style={{ width: "65%" }}
-                            aria-valuenow="100"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <div className="progress-bottom">
-                          <div className="progress-info">65% target raised</div>
-                          <div className="progress-info">
-                            1 ETH = $1000 = 3177.38 CIC
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <a
-                      href="./"
-                      className="btn btn-lg btn-gradient-blue btn-glow"
-                    >
-                      Purchase Token
-                    </a>
-                  </div>
+                  <Swap />
                 </div>
               </div>
               <div

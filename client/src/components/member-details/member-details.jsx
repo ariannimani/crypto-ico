@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { MemberPopup } from "../member-popup/member-popup";
 
 export const MemberDetails = ({
   name,
@@ -9,7 +10,15 @@ export const MemberDetails = ({
   github,
   twitter,
   linkedin,
+  description,
+  languages,
 }) => {
+  const [popup, setPopup] = useState(false);
+
+  const handleBtnClick = (e) => {
+    setPopup((prev) => !prev);
+  };
+
   return (
     <div
       className="col-sm-12 col-md-6 col-lg-4 mb-5 animated"
@@ -27,6 +36,7 @@ export const MemberDetails = ({
             alt={name}
             className="rounded-circle"
             width="128"
+            onClick={handleBtnClick}
           />
         </div>
         <div className="team-icon">
@@ -69,6 +79,11 @@ export const MemberDetails = ({
           )}
         </div>
       </div>
+      {popup ? (
+        <MemberPopup description={description} languages={languages} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

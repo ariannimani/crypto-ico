@@ -1,5 +1,5 @@
 import React from "react";
-import { FAQ } from "../../data/data";
+import { FAQ_QUESTIONS } from "../../data/data";
 import { FaqQuestions } from "./faq-questions";
 
 export const Questions = ({ category, isSelected }) => {
@@ -16,7 +16,7 @@ export const Questions = ({ category, isSelected }) => {
         id={`${category}-accordion`}
         className="collapse-icon accordion-icon-rotate"
       >
-        {FAQ.filter((f) => f.category === category).map((faq) => (
+        {FAQ_QUESTIONS.filter((f) => f.category === category).map((faq) => (
           <FaqQuestions
             key={faq.id}
             id={faq.id}

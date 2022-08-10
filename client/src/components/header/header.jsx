@@ -1,7 +1,42 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { SET_SIGNER, SET_SIGNER_ADDRESS } from "../../context/actions/actions";
+import { StateContext } from "../../context/StateProvider";
 import { Button } from "../button/button";
 
 export const Header = () => {
+  const {
+    providerState,
+    signerAddressState,
+    signerDispatch,
+    signerState,
+    signerAddressDispatch,
+  } = useContext(StateContext);
+
+  const getWalletAddress = () => {
+    signerState.signer.getAddress().then((address) => {
+      signerAddressDispatch({
+        type: SET_SIGNER_ADDRESS,
+        playload: { signerAddress: address, isConnected: true },
+      });
+      // connect weth and uni contracts
+    });
+  };
+
+  const getSigner = async (provider) => {
+    provider.provider.send("eth_requestAccounts", []);
+    const signer = provider.provider.getSigner();
+    signerDispatch({
+      type: SET_SIGNER,
+      playload: { signer: signer, isConnected: true },
+    });
+  };
+
+  useEffect(() => {
+    if (signerState.signer !== undefined) {
+      getWalletAddress();
+    }
+  }, [signerState]);
+
   return (
     <nav className="main-menu static-top navbar-dark navbar navbar-expand-lg fixed-top mb-1">
       <div className="container">
@@ -140,6 +175,11 @@ export const Header = () => {
               <Button
                 ButtonTitle={"Connect Wallet"}
                 cssClasses="btn btn-sm btn-gradient-purple btn-glow my-2 my-sm-0 animated"
+                signerAddress={signerAddressState}
+                signer={signerState}
+                isWallet={true}
+                getSigner={getSigner}
+                provider={providerState}
               />
             </form>
           </div>

@@ -1,0 +1,46 @@
+.currencyInput {
+  background-color: transparent !important;
+  margin: 10px !important;
+  padding: 10px;
+  border-radius: 20px;
+  border-color: #fff !important;
+  border: 1px solid;
+}
+.currencyInput:hover {
+  border-color: #65cdee !important;
+  border: 1px solid;
+}
+::placeholder {
+  opacity: 0.25;
+}
+.numberContainer {
+  text-align: left;
+}
+.spinnerContainer {
+  height: 55px;
+  line-height: 55px;
+}
+.currencyInputField {
+  background-color: transparent !important;
+  font-size: 28px;
+  display: inline-block;
+  width: 100%;
+  border: none;
+}
+.tokenContainer {
+  text-align: right;
+}
+.tokenName {
+  font-size: 28px;
+  display: block;
+  color: #000;
+}
+.balanceContainer {
+  display: block;
+}
+.balanceAmount {
+  width: 100%;
+  font-size: 16px;
+  display: inline;
+  color: #000;
+}

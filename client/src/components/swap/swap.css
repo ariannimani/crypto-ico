@@ -1,0 +1,18 @@
+.appBody {
+  height: 100%;
+}
+
+.swapHeader {
+  text-align: left;
+  padding: 4px 20px 0px 20px;
+}
+
+.swapText {
+  color: #000;
+  font-size: 20px;
+}
+
+.gearContainer {
+  float: right;
+  font-size: 22px;
+}
