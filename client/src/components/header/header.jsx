@@ -1,68 +1,21 @@
 import React, { useContext, useEffect } from "react";
-import {
-  SET_ETH_AMOUNT,
-  SET_SIGNER,
-  SET_SIGNER_ADDRESS,
-  SET_UNI_AMOUNT,
-} from "../../context/actions/actions";
 import { StateContext } from "../../context/StateProvider";
 import { Button } from "../button/button";
-import { ethers } from "ethers";
 
 export const Header = () => {
   const {
     providerState,
     signerAddressState,
-    signerDispatch,
     signerState,
-    signerAddressDispatch,
-    ethContractState,
-    ethAmountDispatch,
-    uniContractState,
-    uniAmountDispatch,
+    getSigner,
+    getWalletAddress,
   } = useContext(StateContext);
-
-  const getWalletAddress = () => {
-    signerState.signer.getAddress().then((address) => {
-      signerAddressDispatch({
-        type: SET_SIGNER_ADDRESS,
-        payload: { signerAddress: address, isConnected: true },
-      });
-      console.log(
-        uniContractState.contract
-          .balanceOf(address)
-          .then((res) => Number(ethers.utils.formatEther(res)))
-      );
-
-      // connect weth and uni contracts
-      ethContractState.contract.balanceOf(address).then((res) =>
-        ethAmountDispatch({
-          type: SET_ETH_AMOUNT,
-          payload: { amount: Number(ethers.utils.formatEther(res)) },
-        })
-      );
-      uniContractState.contract.balanceOf(address).then((res) =>
-        uniAmountDispatch({
-          type: SET_UNI_AMOUNT,
-          payload: { amount: Number(ethers.utils.formatEther(res)) },
-        })
-      );
-    });
-  };
-
-  const getSigner = async (provider) => {
-    provider.provider.send("eth_requestAccounts", []);
-    const signer = provider.provider.getSigner();
-    signerDispatch({
-      type: SET_SIGNER,
-      payload: { signer: signer, isConnected: true },
-    });
-  };
 
   useEffect(() => {
     if (signerState.signer !== undefined) {
       getWalletAddress();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signerState]);
 
   return (
@@ -201,13 +154,16 @@ export const Header = () => {
             <span id="slide-line"></span>
             <form className="form-inline mt-2 mt-md-0">
               <Button
-                ButtonTitle={"Connect Wallet"}
+                ButtonTitle={
+                  signerAddressState.isConnected
+                    ? `${signerAddressState.signerAddress.substring(0, 10)}...`
+                    : "Connect Wallet"
+                }
                 cssClasses="btn btn-sm btn-gradient-purple btn-glow my-2 my-sm-0 animated"
-                signerAddress={signerAddressState}
                 signer={signerState}
-                isWallet={true}
-                getSigner={getSigner}
                 provider={providerState}
+                click={true}
+                clickFunction={getSigner}
               />
             </form>
           </div>

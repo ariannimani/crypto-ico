@@ -7,30 +7,36 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { StateContext } from "../../context/StateProvider";
 import { CurrencyField } from "../currency-field/currency-field";
 import {
-  getEthContract,
-  getUniContract,
   getPrice,
   runSwap,
 } from "../../alpha-router-service/alpha-router-service";
+import { Button } from "../button/button";
 
 export const Swap = () => {
-  const { signerAddress, ethAmountState, uniAmountState } =
-    useContext(StateContext);
+  const {
+    signerAddress,
+    ethAmountState,
+    uniAmountState,
+    getSigner,
+    providerState,
+    signerAddressState,
+    signerState,
+  } = useContext(StateContext);
   const [slippageAmount, setSlippageAmount] = useState(2);
   const [deadlineMinutes, setDeadlineMinutes] = useState(10);
   const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [inputAmount, setInputAmount] = useState(0);
   const [outputAmount, setOutputAmount] = useState(0);
   const [transaction, setTransaction] = useState(0);
   const [loading, setLoading] = useState(0);
   const [ratio, setRatio] = useState();
-  const [uniContract, setUniContract] = useState(0);
-  const [uniAmount, setUniAmount] = useState(0);
 
   const getSwapPrice = (inputAmount) => {
     setLoading(true);
     setInputAmount(inputAmount);
 
+    // eslint-disable-next-line no-unused-vars
     const swap = getPrice(
       inputAmount,
       slippageAmount,
@@ -81,6 +87,27 @@ export const Swap = () => {
             balance={uniAmountState.amount}
             spinner={BeatLoader}
             loading={loading}
+          />
+        </div>
+        <div className="ratioContainer">
+          {ratio && <React.Fragment>{`1 UNI = ${ratio} WETH`}</React.Fragment>}
+        </div>
+        <div className="swapButtonContainer">
+          <Button
+            ButtonTitle={
+              signerAddressState.isConnected ? "Swap" : "Connect Wallet"
+            }
+            cssClasses={
+              signerAddressState.isConnected
+                ? "btn btn-md btn-gradient-blue btn-glow"
+                : "btn btn-md btn-gradient-purple btn-glow my-2 my-sm-0 animated"
+            }
+            provider={
+              signerAddressState.isConnected ? transaction : providerState
+            }
+            signer={signerState.signer}
+            click={true}
+            clickFunction={signerAddressState.isConnected ? runSwap : getSigner}
           />
         </div>
       </div>

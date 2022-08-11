@@ -6,7 +6,6 @@ import { StateContext } from "../../context/StateProvider";
 import {
   ETH_CONTRACT,
   SET_PROVIDER,
-  SET_SIGNER_ADDRESS,
   UNI_CONTRACT,
 } from "../../context/actions/actions";
 import { Swap } from "../../components/swap/swap";
@@ -16,16 +15,8 @@ import {
 } from "../../alpha-router-service/alpha-router-service";
 
 export const Token = () => {
-  const {
-    providerState,
-    providerDispatch,
-    signerState,
-    signerDispatch,
-    signerAddressState,
-    signerAddressDispatch,
-    ethContractDispatch,
-    uniContractDispatch,
-  } = useContext(StateContext);
+  const { providerDispatch, ethContractDispatch, uniContractDispatch } =
+    useContext(StateContext);
 
   const onLoad = async () => {
     const provider = await new ethers.providers.Web3Provider(window.ethereum);
@@ -47,6 +38,7 @@ export const Token = () => {
 
   useEffect(() => {
     onLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
