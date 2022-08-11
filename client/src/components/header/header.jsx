@@ -1,7 +1,13 @@
 import React, { useContext, useEffect } from "react";
-import { SET_SIGNER, SET_SIGNER_ADDRESS } from "../../context/actions/actions";
+import {
+  SET_ETH_AMOUNT,
+  SET_SIGNER,
+  SET_SIGNER_ADDRESS,
+  SET_UNI_AMOUNT,
+} from "../../context/actions/actions";
 import { StateContext } from "../../context/StateProvider";
 import { Button } from "../button/button";
+import { ethers } from "ethers";
 
 export const Header = () => {
   const {
@@ -10,15 +16,37 @@ export const Header = () => {
     signerDispatch,
     signerState,
     signerAddressDispatch,
+    ethContractState,
+    ethAmountDispatch,
+    uniContractState,
+    uniAmountDispatch,
   } = useContext(StateContext);
 
   const getWalletAddress = () => {
     signerState.signer.getAddress().then((address) => {
       signerAddressDispatch({
         type: SET_SIGNER_ADDRESS,
-        playload: { signerAddress: address, isConnected: true },
+        payload: { signerAddress: address, isConnected: true },
       });
+      console.log(
+        uniContractState.contract
+          .balanceOf(address)
+          .then((res) => Number(ethers.utils.formatEther(res)))
+      );
+
       // connect weth and uni contracts
+      ethContractState.contract.balanceOf(address).then((res) =>
+        ethAmountDispatch({
+          type: SET_ETH_AMOUNT,
+          payload: { amount: Number(ethers.utils.formatEther(res)) },
+        })
+      );
+      uniContractState.contract.balanceOf(address).then((res) =>
+        uniAmountDispatch({
+          type: SET_UNI_AMOUNT,
+          payload: { amount: Number(ethers.utils.formatEther(res)) },
+        })
+      );
     });
   };
 
@@ -27,7 +55,7 @@ export const Header = () => {
     const signer = provider.provider.getSigner();
     signerDispatch({
       type: SET_SIGNER,
-      playload: { signer: signer, isConnected: true },
+      payload: { signer: signer, isConnected: true },
     });
   };
 

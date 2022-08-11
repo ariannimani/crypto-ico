@@ -5,8 +5,8 @@ const signerAddressReducer = (state, action) => {
     case SET_SIGNER_ADDRESS: {
       return {
         ...state,
-        signerAddress: action.playload.signerAddress,
-        isConnected: action.playload.isConnected,
+        signerAddress: action.payload.signerAddress,
+        isConnected: action.payload.isConnected,
       };
     }
     default:

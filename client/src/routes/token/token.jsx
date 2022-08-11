@@ -4,10 +4,16 @@ import { ethers } from "ethers";
 import { useContext } from "react";
 import { StateContext } from "../../context/StateProvider";
 import {
+  ETH_CONTRACT,
   SET_PROVIDER,
   SET_SIGNER_ADDRESS,
+  UNI_CONTRACT,
 } from "../../context/actions/actions";
 import { Swap } from "../../components/swap/swap";
+import {
+  getEthContract,
+  getUniContract,
+} from "../../alpha-router-service/alpha-router-service";
 
 export const Token = () => {
   const {
@@ -17,16 +23,29 @@ export const Token = () => {
     signerDispatch,
     signerAddressState,
     signerAddressDispatch,
+    ethContractDispatch,
+    uniContractDispatch,
   } = useContext(StateContext);
 
+  const onLoad = async () => {
+    const provider = await new ethers.providers.Web3Provider(window.ethereum);
+    providerDispatch({
+      type: SET_PROVIDER,
+      payload: { provider: provider },
+    });
+    const ethContract = getEthContract();
+    ethContractDispatch({
+      type: ETH_CONTRACT,
+      payload: { ethContract: ethContract },
+    });
+    const uniContract = getUniContract();
+    uniContractDispatch({
+      type: UNI_CONTRACT,
+      payload: { uniContract: uniContract },
+    });
+  };
+
   useEffect(() => {
-    const onLoad = async () => {
-      const provider = await new ethers.providers.Web3Provider(window.ethereum);
-      providerDispatch({
-        type: SET_PROVIDER,
-        playload: { provider: provider },
-      });
-    };
     onLoad();
   }, []);
 

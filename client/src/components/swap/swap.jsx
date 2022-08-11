@@ -6,9 +6,16 @@ import "./swap.css";
 import BeatLoader from "react-spinners/BeatLoader";
 import { StateContext } from "../../context/StateProvider";
 import { CurrencyField } from "../currency-field/currency-field";
+import {
+  getEthContract,
+  getUniContract,
+  getPrice,
+  runSwap,
+} from "../../alpha-router-service/alpha-router-service";
 
 export const Swap = () => {
-  const { signerAddress } = useContext(StateContext);
+  const { signerAddress, ethAmountState, uniAmountState } =
+    useContext(StateContext);
   const [slippageAmount, setSlippageAmount] = useState(2);
   const [deadlineMinutes, setDeadlineMinutes] = useState(10);
   const [showModal, setShowModal] = useState(false);
@@ -17,10 +24,25 @@ export const Swap = () => {
   const [transaction, setTransaction] = useState(0);
   const [loading, setLoading] = useState(0);
   const [ratio, setRatio] = useState();
-  const [ethContract, setEthContract] = useState(0);
   const [uniContract, setUniContract] = useState(0);
-  const [ethAmount, setEthAmount] = useState(0);
   const [uniAmount, setUniAmount] = useState(0);
+
+  const getSwapPrice = (inputAmount) => {
+    setLoading(true);
+    setInputAmount(inputAmount);
+
+    const swap = getPrice(
+      inputAmount,
+      slippageAmount,
+      Math.floor(Date.now() / 1000 + deadlineMinutes * 60),
+      signerAddress
+    ).then((data) => {
+      setTransaction(data[0]);
+      setOutputAmount(data[1]);
+      setRatio(data[2]);
+      setLoading(false);
+    });
+  };
 
   return (
     <div className="appBody">
@@ -47,16 +69,16 @@ export const Swap = () => {
           <CurrencyField
             field="input"
             tokenName="ETH"
-            //getSwapPrice={getSwapPrice}
+            getSwapPrice={getSwapPrice}
             signer={signerAddress}
-            balance={ethAmount}
+            balance={ethAmountState.amount}
           />
           <CurrencyField
-            field="input"
+            field="output"
             tokenName="UNI"
             value={outputAmount}
             signer={signerAddress}
-            balance={ethAmount}
+            balance={uniAmountState.amount}
             spinner={BeatLoader}
             loading={loading}
           />

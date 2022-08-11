@@ -2,7 +2,7 @@ import React from "react";
 import "./currency-field.css";
 export const CurrencyField = (props) => {
   const getPrice = (value) => {
-    props.getSwapPrice = value;
+    props.getSwapPrice(value);
   };
   return (
     <div className="row currencyInput">
@@ -17,8 +17,10 @@ export const CurrencyField = (props) => {
             className="currencyInputField"
             placeholder="0.0"
             value={props.value}
-            onBlur={(e) =>
-              props.field === "input" ? getPrice(e.target.value) : null
+            onChange={(e) =>
+              props.field === "input" && e.target.value > 0
+                ? getPrice(e.target.value)
+                : null
             }
           />
         )}

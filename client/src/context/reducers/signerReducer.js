@@ -5,8 +5,8 @@ const signerReducer = (state, action) => {
     case SET_SIGNER: {
       return {
         ...state,
-        signer: action.playload.signer,
-        isConnected: action.playload.isConnected,
+        signer: action.payload.signer,
+        isConnected: action.payload.isConnected,
       };
     }
     default:
